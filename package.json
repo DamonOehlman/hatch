@@ -14,6 +14,7 @@
     "eve": "git://github.com/adobe-webplatform/eve.git"
   },
   "devDependencies": {
+    "corser": "git://github.com/DamonOehlman/Corser.git",
     "hyperquest": "0.1.x",
     "tape": "0.3.x"
   },

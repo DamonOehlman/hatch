@@ -31,7 +31,7 @@ EventHatch.prototype._handleRequest = function(req, res) {
             };
 
         debug('received event: ' + evtName, arguments);
-        res.write('data: ' + JSON.stringify(data) + '\n');
+        res.write('data: ' + JSON.stringify(data) + '\n\n');
     }
 
     // if we don't have a hatch url, abort
