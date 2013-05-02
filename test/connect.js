@@ -24,12 +24,28 @@ test('connection tests', function(t) {
             t.plan(2);
 
             req.on('response', function(res) {
-                t.equal(res.statusCode, 200, 'Did not get a 200OK');
-                t.equal(res.headers['content-type'], 'text/event-stream', 'Did not provide an event-stream');
+                t.equal(res.statusCode, 200, 'status code === 200');
+                t.equal(res.headers['content-type'], 'text/event-stream', 'content-type === text/event-stream');
             });
 
             req.on('error', function(err) {
                 t.fail(err);
+            });
+        });
+
+        t.test('heartbeat check', function(t) {
+            var req = request('http://localhost:3000/__hatch' + uuid());
+
+            t.plan(1);
+
+            req.on('response', function(res) {
+                res.on('data', function(data) {
+                    data = data.toString();
+
+                    if (data && data[0] === ':') {
+                        t.pass('found heartbeat comment');
+                    }
+                });
             });
         });
 

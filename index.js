@@ -23,13 +23,18 @@ function EventHatch(server, options) {
 
     // initialise the default base url
     this.baseUrl = opts.baseUrl || '/__hatch';
+
+    // initialise the heartbeat interval (in seconds)
+    this.heartbeatInterval = opts.heartbeatInterval || 15;
 }
 
 /**
 ## _handleRequest
 */
 EventHatch.prototype._handleRequest = function(req, res) {
-    var requestId;
+    var hatchInstance = this,
+        hbInterval,
+        requestId;
 
     function streamEvent() {
         var evtName = eve.nt(),
@@ -51,7 +56,14 @@ EventHatch.prototype._handleRequest = function(req, res) {
 
     // emit the ready event for this request id
     process.nextTick(function() {
-        eve(['hatch', requestId, 'ready'].join('.'));
+        eve(['hatch', requestId, 'ready'].join('.'), hatchInstance);
+
+        // keep the connection alive
+        if (hatchInstance.heartbeatInterval) {
+            hbInterval = setInterval(function() {
+                res.write(':hb\n');
+            }, hatchInstance.heartbeatInterval * 1000);
+        }
     });
 
     // listen for events matching the request id
@@ -61,6 +73,7 @@ EventHatch.prototype._handleRequest = function(req, res) {
     res.on('close', function() {
         debug('unbinding event listener for request id: ' + requestId);
         eve.unbind('hatch.' + requestId, streamEvent);
+        clearInterval(hbInterval);
     });
 
     // send the response
