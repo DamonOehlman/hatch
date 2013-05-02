@@ -4,8 +4,7 @@ var hatch = require('..'),
     eve = require('eve'),
     server = http.createServer(),
     uuid = require('uuid'),
-    request = require('hyperquest'),
-    app = 'http://localhost:3000';
+    request = require('hyperquest');
 
 test('event tests', function(t) {
 
@@ -22,8 +21,19 @@ test('event tests', function(t) {
             id = uuid();
             t.plan(1);
 
-            eve.on(['hatch', id, 'ready'].join('.'), function() {
-                t.pass('event captured');
+            eve.once(['hatch', id, 'ready'].join('.'), function() {
+                t.pass('received hatch.' + id + '.ready');
+            });
+
+            request('http://localhost:3000/__hatch' + id);
+        });
+
+        t.test('you can wait for a hatch', function(t) {
+            id = uuid();
+            t.plan(1);
+
+            hatch.waitFor(id, function() {
+                t.pass('hatch ' + id + ' ready');
             });
 
             request('http://localhost:3000/__hatch' + id);
@@ -58,6 +68,11 @@ test('event tests', function(t) {
                 eve('hatch.' + id + '.foo', null, 'bar');
             });
 
+        });
+
+        t.test('can close the server', function(t) {
+            server.close();
+            t.end();
         });
     });
 });

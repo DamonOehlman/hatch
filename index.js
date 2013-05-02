@@ -1,21 +1,29 @@
 var debug = require('debug')('hatch'),
     eve = require('eve');
 
+function hatch(server, options) {
+    var h = new EventHatch(server, options);
+
+    debug('binding hatch to server, looking for urls matching pattern: ' + h.baseUrl);
+    server.on('request', EventHatch.prototype._handleRequest.bind(h));    
+
+    return h;
+}
+
+hatch.waitFor = function(id, callback) {
+    eve.once(['hatch', id, 'ready'].join('.'), callback);
+};
+
+module.exports = hatch;
+
+/* EventHatch implementaton */
+
 function EventHatch(server, options) {
     var opts = options || {};
 
-    if (! (this instanceof EventHatch)) {
-        return new EventHatch(server, opts);
-    }
-
     // initialise the default base url
     this.baseUrl = opts.baseUrl || '/__hatch';
-
-    debug('binding hatch to server, looking for urls matching pattern: ' + this.baseUrl);
-    server.on('request', this._handleRequest.bind(this));    
 }
-
-module.exports = EventHatch;
 
 /**
 ## _handleRequest

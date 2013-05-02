@@ -32,5 +32,10 @@ test('connection tests', function(t) {
                 t.fail(err);
             });
         });
+
+        t.test('can close the server', function(t) {
+            server.close();
+            t.end();
+        });
     });
 });

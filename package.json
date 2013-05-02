@@ -25,6 +25,8 @@
   "bugs": {
     "url": "http://github.com/DamonOehlman/hatch/issues"
   },
-  "scripts": {},
+  "scripts": {
+    "test": "./node_modules/.bin/tape test/*.js"
+  },
   "contributors": []
 }
