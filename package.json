@@ -7,7 +7,7 @@
     "eve",
     "event"
   ],
-  "version": "0.0.2",
+  "version": "0.0.3",
   "dependencies": {
     "debug": "*",
     "uuid": "~1.4.1",
