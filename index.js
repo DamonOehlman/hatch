@@ -1,5 +1,6 @@
 var debug = require('debug')('hatch'),
-    eve = require('eve');
+    eve = require('eve'),
+    EventChannel = require('./lib/channel');
 
 function hatch(server, options) {
     var h = new EventHatch(server, options);
@@ -29,6 +30,16 @@ function EventHatch(server, options) {
 }
 
 /**
+## channel(id)
+
+Create a channel that provides a simplified gateway for emitting events from the
+server to the client
+*/
+EventHatch.prototype.channel = function(id) {
+    return new EventChannel(this, id);
+};
+
+/**
 ## _handleRequest
 */
 EventHatch.prototype._handleRequest = function(req, res) {
@@ -56,7 +67,7 @@ EventHatch.prototype._handleRequest = function(req, res) {
 
     // emit the ready event for this request id
     process.nextTick(function() {
-        eve(['hatch', requestId, 'ready'].join('.'), hatchInstance);
+        eve(['hatch', requestId, 'ready'].join('.'), hatchInstance.channel(requestId));
 
         // keep the connection alive
         if (hatchInstance.heartbeatInterval) {

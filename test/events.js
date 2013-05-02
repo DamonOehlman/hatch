@@ -30,10 +30,30 @@ test('event tests', function(t) {
 
         t.test('you can wait for a hatch', function(t) {
             id = uuid();
-            t.plan(1);
+            t.plan(2);
 
             hatch.waitFor(id, function() {
                 t.pass('hatch ' + id + ' ready');
+                t.equal(typeof this.emit, 'function', 'hatch provides an emit method');
+            });
+
+            request('http://localhost:3000/__hatch' + id);
+        });
+
+        t.test('waited for hatch instances emit events for the appropriate request id', function(t) {
+            id = uuid();
+            t.plan(3);
+
+            hatch.waitFor(id, function() {
+                t.equal(typeof this.emit, 'function', 'hatch provides an emit method');
+
+                // emit the foo event
+                this.emit('foo', 'bar');
+            });
+
+            eve.once('hatch.' + id + '.foo', function(value) {
+                t.equal(this.id, id, 'hatch emitted event with the appropriate id');
+                t.equal(value, 'bar', 'event passed through value succesfully');
             });
 
             request('http://localhost:3000/__hatch' + id);
