@@ -11,12 +11,12 @@
   "dependencies": {
     "debug": "*",
     "uuid": "~1.4.1",
-    "eve": "git://github.com/adobe-webplatform/eve.git"
+    "eve": "0.3.x"
   },
   "devDependencies": {
     "corser": "git://github.com/DamonOehlman/Corser.git",
     "hyperquest": "0.1.x",
-    "tape": "0.3.x"
+    "tape": "1.0.x"
   },
   "repository": {
     "type": "git",
@@ -26,7 +26,7 @@
     "url": "http://github.com/DamonOehlman/hatch/issues"
   },
   "scripts": {
-    "test": "./node_modules/.bin/tape test/*.js"
+    "test": "./node_modules/.bin/tape test/all.js"
   },
   "contributors": []
 }
