@@ -9,11 +9,10 @@
   ],
   "version": "0.1.0",
   "dependencies": {
-    "debug": "*",
-    "uuid": "~1.4.1",
-    "eve": "0.3.x"
+    "eve": "~0.4.1"
   },
   "devDependencies": {
+    "uuid": "~1.4.1",
     "corser": "git://github.com/DamonOehlman/Corser.git",
     "hyperquest": "0.1.x",
     "tape": "1.0.x"
@@ -26,7 +25,17 @@
     "url": "http://github.com/DamonOehlman/hatch/issues"
   },
   "scripts": {
-    "test": "./node_modules/.bin/tape test/all.js"
+    "test": "node test/all.js",
+    "gendocs": "gendocs > README.md"
   },
-  "contributors": []
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [
+    "eventsource",
+    "eve",
+    "event"
+  ],
+  "license": "MIT"
 }

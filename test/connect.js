@@ -1,57 +1,60 @@
-var hatch = require('..'),
-    http = require('http'),
-    test = require('tape'),
-    server = http.createServer(),
-    uuid = require('uuid'),
-    request = require('hyperquest'),
-    app = 'http://localhost:3000';
+var hatch = require('..');
+var http = require('http');
+var test = require('tape');
+var server = http.createServer();
+var uuid = require('uuid');
+var request = require('hyperquest');
+var app = 'http://localhost:3000';
+var id = uuid.v4();
 
-test('connection tests', function(t) {
+test('can bind hatch to the server', function(t) {
+  t.plan(1);
+  t.ok(hatch(server, { heartbeatInterval: 2 }), 'bound');
+});
 
-    // create the hatch
-    var h = hatch(server),
-        id = uuid();
+test('can have the server listen to the test port', function(t) {
+  t.plan(1);
+  server.listen(3000, t.pass.bind(t, 'ready'));
+});
 
-    server.listen(3000, function() {
+test('content-type is a text/event-stream', function(t) {
+  var req;
 
-        // ensure we have a hatch
-        t.plan(1);
-        t.ok(h, 'Hatch created and bound to the server correctly');
+  t.plan(2);
+  req = request('http://localhost:3000/__hatch' + id);
 
-        t.test('content-type is a text/event-stream', function(t) {
-            var req = request('http://localhost:3000/__hatch' + id);
+  req.on('response', function(res) {
+    t.equal(res.statusCode, 200, 'status code === 200');
+    t.equal(res.headers['content-type'], 'text/event-stream', 'content-type === text/event-stream');
 
-            t.plan(2);
+    // force the socket closed
+    res.socket.end();
+  });
 
-            req.on('response', function(res) {
-                t.equal(res.statusCode, 200, 'status code === 200');
-                t.equal(res.headers['content-type'], 'text/event-stream', 'content-type === text/event-stream');
-            });
+  req.on('error', function(err) {
+    t.fail(err);
+  });
+});
 
-            req.on('error', function(err) {
-                t.fail(err);
-            });
-        });
+test('heartbeat check', function(t) {
+  var req;
 
-        t.test('heartbeat check', function(t) {
-            var req = request('http://localhost:3000/__hatch' + uuid());
+  t.plan(1);
+  req = request('http://localhost:3000/__hatch' + uuid());
 
-            t.plan(1);
+  req.on('response', function(res) {
+    res.on('data', function(data) {
+      data = data.toString();
 
-            req.on('response', function(res) {
-                res.on('data', function(data) {
-                    data = data.toString();
-
-                    if (data && data[0] === ':') {
-                        t.pass('found heartbeat comment');
-                    }
-                });
-            });
-        });
-
-        t.test('can close the server', function(t) {
-            server.close();
-            t.end();
-        });
+      if (data && data[0] === ':') {
+        t.pass('found heartbeat comment');
+        res.socket.end();
+      }
     });
+  });
+});
+
+test('can close the server', function(t) {
+  t.plan(1);
+  t.ok(server.close(), 'finished');
 });

@@ -1,37 +1,44 @@
-var eve = require('eve'),
-    util = require('util'),
-    EventEmitter = require('events').EventEmitter;
+/* jshint node: true */
+'use strict';
+
+var eve = require('eve');
+var util = require('util');
+var EventEmitter = require('events').EventEmitter;
+
+/**
+  ### HatchClient(id, options)
+
+**/
 
 function HatchClient(id, options) {
-    var opts = options || {};
+  var opts = options || {};
 
-    if (! (this instanceof HatchClient)) {
-        return new HatchClient(id, options);
-    }
+  if (! (this instanceof HatchClient)) {
+      return new HatchClient(id, options);
+  }
 
-    this.id = id;
-    this.source = new EventSource((opts.server || '/__hatch') + this.id);
+  this.id = id;
+  this.source = new EventSource((opts.server || '/__hatch') + this.id);
 
-    // handle messages
-    this.source.addEventListener('message', this._handleMessage.bind(this));
+  // handle messages
+  this.source.addEventListener('message', this.handleMessage.bind(this));
 }
 
 util.inherits(HatchClient, EventEmitter);
 module.exports = HatchClient;
 
 /**
-## _handleMessage
-*/
-HatchClient.prototype._handleMessage = function(evt) {
+  ### HatchClient#handleMessage(evt)
+**/
+HatchClient.prototype.handleMessage = function(evt) {
     var data;
 
     try {
-        data = JSON.parse(evt.data);
+      data = JSON.parse(evt.data);
 
-        // emit the event
-        this.emit.apply(this, [data.name].concat(data.args));
+      // emit the event
+      this.emit.apply(this, [data.name].concat(data.args));
     }
     catch (e) {
     }
 };
-

@@ -1,5 +1,5 @@
-var hatch = require('../client'),
-    uuid = require('uuid');
+var hatch = require('../client');
+var uuid = require('uuid');
 
 hatch(uuid(), { server: 'http://localhost:3000/__hatch' })
     .on('ready', function() {
