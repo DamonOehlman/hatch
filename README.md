@@ -9,9 +9,6 @@ events in a server process to the client using unique request ids.
 
 [![Build Status](https://travis-ci.org/DamonOehlman/hatch.png?branch=master)](https://travis-ci.org/DamonOehlman/hatch)
 
-[![browser support](https://ci.testling.com/DamonOehlman/hatch.png)](https://ci.testling.com/DamonOehlman/hatch)
-
-
 ## Reference
 
 ### hatch(server, opts?)
