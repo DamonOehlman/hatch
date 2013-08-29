@@ -56,7 +56,12 @@ var hatch = module.exports = function(server, opts) {
 
     // create the channel
     channel = new EventChannel(requestId);
-    channel.close = res.end.bind(res);
+
+    // add a close handler
+    channel.close = function() {
+      cleanup();
+      res.end();
+    };
 
     // emit the ready event for this request id
     process.nextTick(function() {
@@ -74,8 +79,9 @@ var hatch = module.exports = function(server, opts) {
     eve.on('hatch.' + requestId, streamEvent);
 
     // when the response is closed, unbind the handler
+    res.on('end', cleanup);
     res.on('close', cleanup);
-    req.on('end', cleanup);
+    // req.on('close', cleanup);
 
     // send the response
     res.writeHead(200, {

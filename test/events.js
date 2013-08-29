@@ -24,7 +24,7 @@ test('connecting to the eventstream triggers a hatch.%id%.ready event', function
   t.plan(1);
   eve.once('hatch.ready', function() {
     t.equal(eve.nt().split('.')[2], id, 'got id match');
-    this.close();
+    process.nextTick(this.close);
   });
 
   request('http://localhost:3000/__hatch' + id);
@@ -37,7 +37,7 @@ test('you can wait for a hatch', function(t) {
   hatch.waitFor(id, function() {
     t.pass('hatch ' + id + ' ready');
     t.equal(typeof this.emit, 'function', 'hatch provides an emit method');
-    this.close();
+    process.nextTick(this.close);
   });
 
   request('http://localhost:3000/__hatch' + id);
@@ -65,23 +65,30 @@ test('waited for hatch instances emit events for the appropriate request id', fu
 
 test('eve events are routed to the event stream', function(t) {
   var req;
+  var buffer = '';
 
   id = uuid();
-  t.plan(1);
+  t.plan(2);
 
-  req = request('http://localhost:3000/__hatch' + id)
+  req = request('http://localhost:3000/__hatch' + id);
   req.once('response', function(res) {
     // look for response data
-    res.on('data', function(data) {
-      try {
-        data = JSON.parse(data.toString().slice(5));
+    res.on('data', function handleData(data) {
+      buffer += data.toString();
 
-        if (data.name === 'foo') {
-          t.pass('foo event captured');
-          res.socket.end();
+      if (buffer.indexOf('}') >= 0) {
+        try {
+          data = JSON.parse(data.toString().slice(5));
+
+          if (data.name === 'foo') {
+            t.pass('foo event captured');
+            res.removeListener('data', handleData);
+            res.socket.end();
+          }
         }
-      }
-      catch (e) {
+        catch (e) {
+          t.fail('errored out', e);
+        }
       }
     });
   });
@@ -91,10 +98,10 @@ test('eve events are routed to the event stream', function(t) {
   });
 
   hatch.waitFor(id, function() {
+    t.pass('hatch ready, sending event');
     eve('hatch.' + id + '.foo', null, 'bar');
   });
 });
-
 
 test('can close the server', function(t) {
   t.plan(1);
