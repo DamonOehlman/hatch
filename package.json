@@ -1,7 +1,7 @@
 {
   "name": "hatch",
   "description": "Eve events over the wire using HTTP EventSource",
-  "author": "Damon Oehlman <damon.oehlman@sidelab.com>",
+  "author": "Damon Oehlman <damon.oehlman@gmail.com>",
   "tags": [
     "eventsource",
     "eve",
