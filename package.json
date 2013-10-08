@@ -2,11 +2,6 @@
   "name": "hatch",
   "description": "Eve events over the wire using HTTP EventSource",
   "author": "Damon Oehlman <damon.oehlman@gmail.com>",
-  "tags": [
-    "eventsource",
-    "eve",
-    "event"
-  ],
   "version": "0.2.1",
   "dependencies": {
     "eve": "~0.4.1"
@@ -19,10 +14,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/DamonOehlman/hatch.git"
+    "url": "https://bitbucket.org/DamonOehlman/hatch.git"
   },
   "bugs": {
-    "url": "http://github.com/DamonOehlman/hatch/issues"
+    "url": "https://bitbucket.org/DamonOehlman/hatch/issues"
   },
   "scripts": {
     "test": "node test/all.js",
