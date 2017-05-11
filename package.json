@@ -4,13 +4,13 @@
   "author": "Damon Oehlman <damon.oehlman@gmail.com>",
   "version": "0.2.2",
   "dependencies": {
-    "eve": "~0.4.1"
+    "eve": "^0.5.4"
   },
   "devDependencies": {
-    "uuid": "~1.4.1",
-    "corser": "git://github.com/DamonOehlman/Corser.git",
-    "hyperquest": "0.1.x",
-    "tape": "1.0.x"
+    "corser": "^2.0.1",
+    "hyperquest": "^2.1.2",
+    "tape": "^4.6.3",
+    "uuid": "^3.0.1"
   },
   "repository": {
     "type": "git",
