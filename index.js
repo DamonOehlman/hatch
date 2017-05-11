@@ -1,6 +1,3 @@
-/* jshint node: true */
-'use strict';
-
 var eve = require('eve');
 var EventChannel = require('./channel');
 

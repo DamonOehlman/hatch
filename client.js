@@ -1,14 +1,5 @@
-/* jshint node: true */
-'use strict';
-
-var eve = require('eve');
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
-
-/**
-  ### HatchClient(id, options)
-
-**/
 
 function HatchClient(id, options) {
   var opts = options || {};
@@ -27,9 +18,6 @@ function HatchClient(id, options) {
 util.inherits(HatchClient, EventEmitter);
 module.exports = HatchClient;
 
-/**
-  ### HatchClient#handleMessage(evt)
-**/
 HatchClient.prototype.handleMessage = function(evt) {
     var data;
 
