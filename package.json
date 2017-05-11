@@ -14,10 +14,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://bitbucket.org/DamonOehlman/hatch.git"
+    "url": "https://github.com/DamonOehlman/hatch.git"
   },
   "bugs": {
-    "url": "https://bitbucket.org/DamonOehlman/hatch/issues"
+    "url": "https://github.com/DamonOehlman/hatch/issues"
   },
   "scripts": {
     "test": "node test/all.js",
