@@ -1,11 +1,11 @@
-var hatch = require('..');
-var http = require('http');
-var test = require('tape');
-var server = http.createServer();
-var uuid = require('uuid');
-var request = require('hyperquest');
-var app = 'http://localhost:3000';
-var id = uuid.v4();
+const { hatch } = require('..');
+const http = require('http');
+const test = require('tape');
+const server = http.createServer();
+const uuid = require('uuid');
+const request = require('hyperquest');
+const app = 'http://localhost:3000';
+const id = uuid.v4();
 
 test('can bind hatch to the server', function(t) {
   t.plan(1);
@@ -18,11 +18,8 @@ test('can have the server listen to the test port', function(t) {
 });
 
 test('content-type is a text/event-stream', function(t) {
-  var req;
-
   t.plan(2);
-  req = request('http://localhost:3000/__hatch' + id);
-
+  const req = request('http://localhost:3000/__hatch' + id);
   req.on('response', function(res) {
     t.equal(res.statusCode, 200, 'status code === 200');
     t.equal(res.headers['content-type'], 'text/event-stream', 'content-type === text/event-stream');
@@ -37,11 +34,8 @@ test('content-type is a text/event-stream', function(t) {
 });
 
 test('heartbeat check', function(t) {
-  var req;
-
   t.plan(1);
-  req = request('http://localhost:3000/__hatch' + uuid());
-
+  const req = request('http://localhost:3000/__hatch' + uuid());
   req.on('response', function(res) {
     res.on('data', function(data) {
       data = data.toString();
