@@ -53,7 +53,7 @@ export const hatch = (server: Server, opts?: HatchOpts) => {
 
     // emit the ready event for this request id
     process.nextTick(() => {
-      eve('hatch.ready.' + requestId, channel);
+      eve('hatch.ready.' + requestId, channel, channel);
       if (heartbeatInterval) {
         hbInterval = setInterval(() => res.write(':hb\n'), heartbeatInterval * 1000);
       }
@@ -78,8 +78,8 @@ export const hatch = (server: Server, opts?: HatchOpts) => {
   return server;
 }
 
-export const waitFor = (id: string, callback: (this: EventChannel) => void) => {
-  eve.once(`hatch.ready.${id}`, callback);
+export const waitFor = (id: string, onReady: (channel: EventChannel) => void) => {
+  eve.once(`hatch.ready.${id}`, onReady);
 };
 
 function withDefaults(opts?: HatchOpts) {

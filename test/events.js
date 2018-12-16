@@ -21,37 +21,37 @@ test('connecting to the eventstream triggers a hatch.%id%.ready event', function
   const id = uuid.v4();
 
   t.plan(1);
-  eve.once('hatch.ready', function() {
+  eve.once('hatch.ready', (channel) => {
     t.equal(eve.nt().split('.')[2], id, 'got id match');
-    process.nextTick(() => this.close());
+    process.nextTick(() => channel.close());
   });
 
-  request('http://localhost:3000/__hatch' + id);
+  request(`http://localhost:3000/__hatch${id}`);
 });
 
 test('you can wait for a hatch', function(t) {
   const id = uuid.v4();
   t.plan(2);
 
-  waitFor(id, function() {
+  waitFor(id, (channel) =>  {
     t.pass('hatch ' + id + ' ready');
     t.equal(typeof this.emit, 'function', 'hatch provides an emit method');
-    process.nextTick(() => this.close());
+    process.nextTick(() => channel.close());
   });
 
-  request('http://localhost:3000/__hatch' + id);
+  request(`http://localhost:3000/__hatch${id}`);
 });
 
 test('waited for hatch instances emit events for the appropriate request id', function(t) {
   const id = uuid.v4();
   t.plan(3);
 
-  waitFor(id, function() {
-    t.equal(typeof this.emit, 'function', 'hatch provides an emit method');
+  waitFor(id, (channel) => {
+    t.equal(typeof channel.emit, 'function', 'hatch provides an emit method');
 
     // emit the foo event
-    this.emit('foo', 'bar');
-    process.nextTick(() => this.close());
+    channel.emit('foo', 'bar');
+    process.nextTick(() => channel.close());
   });
 
   eve.once('hatch.' + id + '.foo', function(value) {
@@ -59,7 +59,7 @@ test('waited for hatch instances emit events for the appropriate request id', fu
     t.equal(value, 'bar', 'event passed through value succesfully');
   });
 
-  request('http://localhost:3000/__hatch' + id);
+  request(`http://localhost:3000/__hatch${id}`);
 });
 
 test('eve events are routed to the event stream', function(t) {
