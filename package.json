@@ -25,6 +25,7 @@
     "url": "https://github.com/DamonOehlman/hatch/issues"
   },
   "scripts": {
+    "prepare": "tsc",
     "compile": "tsc",
     "pretest": "tsc",
     "test": "node test/all.js",
