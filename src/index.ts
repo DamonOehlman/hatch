@@ -53,7 +53,7 @@ export const hatch = (server: Server, opts?: HatchOpts) => {
 
     // emit the ready event for this request id
     process.nextTick(() => {
-      eve('hatch.ready.' + requestId, null, channel);
+      eve('hatch.ready.' + requestId, channel, channel);
       if (heartbeatInterval) {
         hbInterval = setInterval(() => res.write(':hb\n'), heartbeatInterval * 1000);
       }
