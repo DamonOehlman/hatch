@@ -34,6 +34,7 @@
   "directories": {
     "test": "test"
   },
+  "stability": "experimental",
   "keywords": [
     "eventsource",
     "eve",

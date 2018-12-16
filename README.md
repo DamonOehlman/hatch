@@ -6,7 +6,7 @@ events in a server process to the client using unique request ids.
 
 [![NPM](https://nodei.co/npm/hatch.png)](https://nodei.co/npm/hatch/)
 
-[![Build Status](https://api.travis-ci.org/DamonOehlman/hatch.svg?branch=master)](https://travis-ci.org/DamonOehlman/hatch)
+[![experimental](https://img.shields.io/badge/stability-experimental-red.svg)](https://github.com/dominictarr/stability#experimental) [![Build Status](https://api.travis-ci.org/DamonOehlman/hatch.svg?branch=master)](https://travis-ci.org/DamonOehlman/hatch)
 
 ## Reference
 
