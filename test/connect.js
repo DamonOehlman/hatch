@@ -35,7 +35,7 @@ test('content-type is a text/event-stream', function(t) {
 
 test('heartbeat check', function(t) {
   t.plan(1);
-  const req = request('http://localhost:3000/__hatch' + uuid());
+  const req = request('http://localhost:3000/__hatch' + uuid.v4());
   req.on('response', function(res) {
     res.on('data', function(data) {
       data = data.toString();
